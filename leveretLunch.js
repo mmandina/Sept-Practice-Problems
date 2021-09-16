@@ -22,13 +22,13 @@ function findNeighborsMax(neighborsArray, row, column) {
   let max = 0;
   let maxIndex = new Array(2);
   let indexOfMax;
-  console.log("neighbors array is", neighborsArray);
+
   indexOfMax = neighborsArray.indexOf(Math.max(...neighborsArray));
 
   if (neighborsArray[indexOfMax] == 0) {
     return [undefined, undefined];
   }
-  console.log("index of Max is", indexOfMax);
+
   switch (indexOfMax) {
     case 0:
       maxIndex = [row, column - 1];
@@ -59,8 +59,7 @@ function findCenter(field) {
   let column = 0;
   let numRows = field.length;
   let numColumns = field[0].length;
-  //console.log(numRows);
-  //console.log(numColumns);
+
   if (numRows % 2 === 1 && numColumns % 2 === 1) {
     row = (numRows - 1) / 2;
     column = (numColumns - 1) / 2;
@@ -133,7 +132,7 @@ function leveretLunch(field) {
   let nextNeighbor = [];
   totalEaten += field[rabbitPosition[0]][rabbitPosition[1]];
   field[rabbitPosition[0]][rabbitPosition[1]] = 0;
-  console.log("total eaten is", totalEaten);
+
   while (true) {
     neighborsArray = neighbors(field, rabbitPosition[0], rabbitPosition[1]);
     nextNeighbor = findNeighborsMax(
@@ -142,21 +141,19 @@ function leveretLunch(field) {
       rabbitPosition[1]
     );
 
-    console.log("next neighbor is", nextNeighbor);
     if (nextNeighbor[0] == undefined) {
       return totalEaten;
     }
     rabbitPosition = nextNeighbor;
     totalEaten += field[rabbitPosition[0]][rabbitPosition[1]];
-    console.log("total eaten is", totalEaten);
+
     field[rabbitPosition[0]][rabbitPosition[1]] = 0;
   }
   return totalEaten;
 }
 const garden = [
-  [2, 3, 1, 4, 2, 2, 3],
-  [2, 3, 0, 4, 0, 3, 0],
-  [1, 7, 0, 2, 1, 2, 3],
-  [9, 3, 0, 4, 2, 0, 3],
+  [1, 1, 1],
+  [0, 1, 1],
+  [9, 1, 9],
 ];
-console.log(leveretLunch(garden));
+console.log("result is", leveretLunch(garden));
