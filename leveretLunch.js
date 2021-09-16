@@ -1,7 +1,12 @@
 function cellCheck(field, row, column) {
-  if (field[row][column] != undefined) {
+  if (
+    row <= field.length - 1 &&
+    row >= 0 &&
+    column >= 0 &&
+    column <= field[0].length - 1
+  ) {
     return field[row][column];
-  } else return undefined;
+  } else return 0;
 }
 //array listing neighbors WNES
 function neighbors(field, row, column) {
@@ -16,35 +21,36 @@ function neighbors(field, row, column) {
 function findNeighborsMax(neighborsArray, row, column) {
   let max = 0;
   let maxIndex = new Array(2);
-  for (let i = 0; i < neighborsArray.length; i++) {
-    if (
-      neighborsArray[neighbors] != undefined &&
-      neighborsArray[neighbors] > max
-    ) {
-      max = neighborsArray[neighbors];
-      switch (i) {
-        case 0:
-          maxIndex = [row, column - 1];
-          return maxIndex;
-          break;
-        case 1:
-          maxIndex = [row - 1, column];
-          return maxIndex;
-          break;
-        case 2:
-          maxIndex = [row, column + 1];
-          return maxIndex;
-          break;
-        case 3:
-          maxIndex = [row + 1, column];
-          return maxIndex;
-          break;
-        default:
-          return maxIndex;
-          break;
-      }
-    }
+  let indexOfMax;
+  console.log("neighbors array is", neighborsArray);
+  indexOfMax = neighborsArray.indexOf(Math.max(...neighborsArray));
+
+  if (neighborsArray[indexOfMax] == 0) {
+    return [undefined, undefined];
   }
+  console.log("index of Max is", indexOfMax);
+  switch (indexOfMax) {
+    case 0:
+      maxIndex = [row, column - 1];
+      return maxIndex;
+      break;
+    case 1:
+      maxIndex = [row - 1, column];
+      return maxIndex;
+      break;
+    case 2:
+      maxIndex = [row, column + 1];
+      return maxIndex;
+      break;
+    case 3:
+      maxIndex = [row + 1, column];
+      return maxIndex;
+      break;
+    default:
+      return [undefined, undefined];
+      break;
+  }
+
   return maxIndex;
 }
 
@@ -69,15 +75,15 @@ function findCenter(field) {
     return [row, column];
   }
   if (numRows % 2 === 0 && numColumns % 2 === 1) {
-    console.log("entered right");
     column = (numColumns - 1) / 2;
-    console.log(field[0][column]);
+
     row =
       field[Math.floor((numRows - 1) / 2)][column] > field[numRows / 2][column]
         ? Math.floor((numRows - 1) / 2)
         : numRows / 2;
     return [row, column];
   }
+
   if (numRows % 2 === 0 && numColumns % 2 === 0) {
     let leftUp,
       rightUp,
@@ -88,6 +94,7 @@ function findCenter(field) {
     rightUp = field[Math.floor((numRows - 1) / 2)][numColumns / 2];
     rightDown = field[numRows / 2][numColumns / 2];
     leftDown = field[numRows / 2][Math.floor((numColumns - 1) / 2)];
+
     const arr = [leftUp, rightUp, rightDown, leftDown];
     let ind = arr.indexOf(Math.max(...arr));
     switch (ind) {
@@ -120,13 +127,36 @@ function findCenter(field) {
 
 function leveretLunch(field) {
   let totalEaten = 0;
+  let rabbitPosition = new Array(2);
+  rabbitPosition = findCenter(field);
+  let neighborsArray = [];
+  let nextNeighbor = [];
+  totalEaten += field[rabbitPosition[0]][rabbitPosition[1]];
+  field[rabbitPosition[0]][rabbitPosition[1]] = 0;
+  console.log("total eaten is", totalEaten);
+  while (true) {
+    neighborsArray = neighbors(field, rabbitPosition[0], rabbitPosition[1]);
+    nextNeighbor = findNeighborsMax(
+      neighborsArray,
+      rabbitPosition[0],
+      rabbitPosition[1]
+    );
 
+    console.log("next neighbor is", nextNeighbor);
+    if (nextNeighbor[0] == undefined) {
+      return totalEaten;
+    }
+    rabbitPosition = nextNeighbor;
+    totalEaten += field[rabbitPosition[0]][rabbitPosition[1]];
+    console.log("total eaten is", totalEaten);
+    field[rabbitPosition[0]][rabbitPosition[1]] = 0;
+  }
   return totalEaten;
 }
 const garden = [
-  [9, 9, 9, 9],
-  [9, 2, 5, 0],
-  [9, 6, 3, 2],
-  [9, 9, 1, 0],
+  [2, 3, 1, 4, 2, 2, 3],
+  [2, 3, 0, 4, 0, 3, 0],
+  [1, 7, 0, 2, 1, 2, 3],
+  [9, 3, 0, 4, 2, 0, 3],
 ];
-leveretLunch(garden);
+console.log(leveretLunch(garden));
