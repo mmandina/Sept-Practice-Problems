@@ -1,0 +1,79 @@
+let garden = [
+  [1, 1, 1],
+  [0, 1, 1],
+  [9, 1, 9],
+];
+//takes in a field, returns number of carrots eaten
+function lunch(field) {
+  const nrows = garden.length;
+  const ncols = garden[0].length;
+  let sum = 0;
+  //find the starting point
+  //the starting point is taken directly from the solution
+  let consider = [
+    [Math.floor((nrows - 1) / 2), Math.floor((ncols - 1) / 2)],
+    [Math.floor((nrows - 1) / 2), Math.floor((ncols - 0) / 2)],
+    [Math.floor((nrows - 0) / 2), Math.floor((ncols - 1) / 2)],
+    [Math.floor((nrows - 0) / 2), Math.floor((ncols - 0) / 2)],
+  ];
+
+  let next = findMaxNeighbor(field, consider);
+
+  while (true) {
+    let row = next[0];
+    let col = next[1];
+    console.log("row and col are", row, col);
+    //check if there are no more moves
+
+    //eat the carrots
+    sum += field[row][col];
+    field[row][col] = 0;
+
+    consider = findNeighbors([row, col], field, nrows, ncols);
+    if (consider.length === 0) {
+      return sum;
+    }
+    next = findMaxNeighbor(field, consider);
+  }
+}
+
+//pass in the field, current coordinates
+//coordinates [rows, columns]
+//returns an array of possible moves
+function findNeighbors(location, field, nrows, ncols) {
+  let currentRow = location[0];
+  let currentCol = location[1];
+
+  let neighbors = [
+    [currentRow, currentCol - 1],
+    [currentRow - 1, currentCol],
+    [currentRow, currentCol + 1],
+    [currentRow + 1, currentCol],
+  ];
+  let legalNeighbors = neighbors.filter(
+    ([row, col]) =>
+      0 <= row &&
+      row <= nrows - 1 &&
+      0 <= col &&
+      col <= ncols - 1 &&
+      field[row][col] !== 0
+  );
+  console.log("legal neighbors are", legalNeighbors);
+  return legalNeighbors;
+}
+
+function findMaxNeighbor(field, legNeighbors) {
+  let maxNeighbor = [];
+  let maxValue = 0;
+  for (let coord of legNeighbors) {
+    let row = coord[0];
+    let col = coord[1];
+    if (field[row][col] > maxValue) {
+      maxValue = field[row][col];
+      maxNeighbor = coord;
+    }
+  }
+  return maxNeighbor;
+}
+
+console.log(lunch(garden));
