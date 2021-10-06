@@ -150,3 +150,38 @@ console.log(getDay()); // should log: 'Fri'
 console.log(getDay()); // should log: 'Sat'
 console.log(getDay()); // should log: 'Sun'
 console.log(getDay()); // should log: 'Fri'
+
+// ADD CODE HERE
+function defineFirstArg(cb, arg) {
+  function newFunc(...args) {
+    return cb(arg, ...args);
+  }
+  return newFunc;
+}
+// Uncomment these to check your work!
+// const subtract = function(big, small) { return big - small; };
+// const subFrom20 = defineFirstArg(subtract, 20);
+// console.log(subFrom20(5)); // should log: 15
+
+function censor() {
+  let stringObj = {};
+  function stringFunc(...strings) {
+    if (strings.length === 2) {
+      stringObj[strings[0]] = strings[1];
+      return;
+    } else {
+      for (let key in stringObj) {
+        strings[0] = strings[0].replace(key, stringObj[key]);
+      }
+      return strings[0];
+    }
+  }
+  return stringFunc;
+}
+// ADD CODE HERE
+
+// Uncomment these to check your work!
+// const changeScene = censor();
+// changeScene('dogs', 'cats');
+// changeScene('quick', 'slow');
+// console.log(changeScene('The quick, brown fox jumps over the lazy dogs.')); // should log: 'The slow, brown fox jumps over the lazy cats.'
