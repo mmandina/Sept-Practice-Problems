@@ -146,3 +146,110 @@ function arrToObj(array, callback) {
 const arrOfStrings = ["beer", "glue"];
 const capitalize = (str) => str.toUpperCase();
 console.log(arrToObj(arrOfStrings, capitalize)); // should log: { beer: 'BEER', glue: 'GLUE' }
+function multiMap(valArray, funArray) {
+  let obj = {};
+  for (let val of valArray) {
+    if (!obj[val]) {
+      obj[val] = [];
+    }
+    for (let fun of funArray) {
+      obj[val].push(fun(val));
+    }
+  }
+
+  return obj;
+}
+// Uncomment these to check your work!
+// function uppercaser(str) { return str.toUpperCase(); }
+// function capitalize(str) { return str[0].toUpperCase() + str.slice(1).toLowerCase(); }
+// function repeater(str) { return str + str; }
+// const items = ['catfood', 'glue', 'beer'];
+// const functions = [uppercaser, capitalize, repeater];
+// console.log(multiMap(items, functions)); // should log: { catfood: ['CATFOOD', 'Catfood', 'catfoodcatfood'], glue: ['GLUE', 'Glue', 'glueglue'], beer: ['BEER', 'Beer', 'beerbeer'] }
+// ADD CODE HERE
+function majority(array, callback) {
+  let trueCounter = 0;
+  for (let item of array) {
+    if (callback(item)) {
+      trueCounter++;
+    }
+    if (trueCounter > array.length / 2) {
+      return true;
+    }
+  }
+
+  return false;
+}
+// Uncomment these to check your work!
+// const isOdd = function(num) { return num % 2 === 1; };
+// console.log(majority([1, 2, 3, 4, 5], isOdd)); // should log: true
+// console.log(majority([2, 3, 4, 5], isOdd)); // should log: false
+// ADD CODE HERE
+function prioritize(array, callback) {
+  let trueArray = [];
+  let falseArray = [];
+  for (let item of array) {
+    if (callback(item)) {
+      trueArray.push(item);
+    } else {
+      falseArray.push(item);
+    }
+  }
+
+  return trueArray.concat(falseArray);
+}
+//Uncomment these to check your work!
+// function startsWithS(str) { return str[0].toLowerCase() === 's'; }
+// const tvShows = ['curb', 'rickandmorty', 'seinfeld', 'sunny', 'friends']
+// console.log(prioritize(tvShows, startsWithS)); // should log: ['seinfeld', 'sunny', 'curb', 'rickandmorty', 'friends']
+// ADD CODE HERE
+function countBy(array, callback) {
+  let obj = {};
+  for (let item of array) {
+    if (!obj[callback(item)]) {
+      obj[callback(item)] = 1;
+    } else {
+      obj[callback(item)]++;
+    }
+  }
+
+  return obj;
+}
+// Uncomment these to check your work!
+// function evenOdd(n) {
+//   if (n % 2 === 0) return 'even';
+//   else return 'odd';
+//  }
+//  const nums = [1, 2, 3, 4, 5];
+// console.log(countBy(nums, evenOdd)); // should log: { odd: 3, even: 2 }
+// ADD CODE HERE
+function groupBy(array, callback) {
+  let obj = {};
+  array.forEach((a) => {
+    if (obj[callback(a)]) {
+      obj[callback(a)].push(a);
+    } else {
+      obj[callback(a)] = [a];
+    }
+  });
+
+  return obj;
+}
+// Uncomment these to check your work!
+// const decimals = [1.3, 2.1, 2.4];
+// const floored = function(num) { return Math.floor(num); };
+// console.log(groupBy(decimals, floored)); // should log: { 1: [1.3], 2: [2.1, 2.4] }
+function goodKeys(obj, callback) {
+  let array = [];
+  for (let key in obj) {
+    if (callback(obj[key])) {
+      array.push(key);
+    }
+  }
+
+  return array;
+}
+// Uncomment these to check your work!
+// const sunny = { mac: 'priest', dennis: 'calculator', charlie: 'birdlaw', dee: 'bird', frank: 'warthog' };
+// function startsWithBird(str) { return str.slice(0, 4).toLowerCase() === 'bird'; };
+// console.log(goodKeys(sunny, startsWithBird)); // should log: ['charlie', 'dee']
